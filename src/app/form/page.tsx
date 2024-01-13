@@ -60,13 +60,14 @@ const generateOptions = (mappedData: { [key: string]: any }) => {
   return options;
 };
 
-
 /* return an objectt of array of jsx componets from mappedFormOptions*/
-const allOptions = Object.entries(mappedFormOptions).reduce<OptionElements>((acc , [key, value]) => {
-  acc[key] =  generateOptions(value);
-  return acc;
-}, {});
-
+const allOptions = Object.entries(mappedFormOptions).reduce<OptionElements>(
+  (acc, [key, value]) => {
+    acc[key] = generateOptions(value);
+    return acc;
+  },
+  {}
+);
 
 console.log(allOptions);
 
@@ -90,11 +91,10 @@ export default function Form() {
                 <div className="mb-2 block">
                   <Label htmlFor="empresa" value="Empresa" />
                 </div>
-                <Select id="empresa"
-                  
-                  required
-                >
-                  <option value="0">Seleccione Empresa</option>
+                <Select id="empresa" required>
+                  <option value="0" className="text-gray-500 ">
+                    Seleccione Empresa
+                  </option>
                   {allOptions.companies}
                 </Select>
               </div>
@@ -113,12 +113,10 @@ export default function Form() {
                 <div className="mb-2 block">
                   <Label htmlFor="tipojaula" value="Tipo de jaula" />
                 </div>
-                <TextInput
-                  id="tipojaula"
-                  type="text"
-                  placeholder="Tipo de jaula"
-                  required
-                />
+                <Select id="tipojaula">
+                  <option value="0">Seleccione Tipo de Jaula</option>
+                  {allOptions.typeOfCages}
+                </Select>
               </div>
               {/* formularion para fecha  */}
               <div>
@@ -138,6 +136,10 @@ export default function Form() {
         >
           <Tabs.Item title="Materiales" active={true} className="block">
             {/* titulo de formulario */}
+            {/* TODO: make a select list to add diffrents kinds of materials from allOptions.materials */}
+
+            {}
+
             <div className="grid gap-6 mb-6 md:grid-cols-2 xl:grid-cols-3 ">
               <div>
                 <div className="mb-2 block">
@@ -214,24 +216,21 @@ export default function Form() {
                 <div className="mb-2 block">
                   <Label htmlFor="Encargado" value="Encargado" />
                 </div>
-                <TextInput
-                  id="encargado "
-                  type="text"
-                  placeholder="Nombre Encargado"
-                  required
-                />
+                <Select id="Encargado" required>
+                  <option value="0">Seleccione Encargado</option>
+                  {allOptions.employees}
+                </Select>
               </div>
               {/* formularion para centro  */}
               <div>
                 <div className="mb-2 block">
                   <Label htmlFor="Trabajos" value="Trabajos" />
                 </div>
-                <TextInput
-                  id="Trabajos"
-                  type="text"
-                  placeholder="Ingrese Trabajos"
-                  required
-                />
+
+                <Select id="Trabajos">
+                  <option value="0">Seleccione Trabajos</option>
+                  {allOptions.workTypes}
+                </Select>
               </div>
               {/* formularion para fecha  */}
               <div>
@@ -250,12 +249,10 @@ export default function Form() {
                 <div className="mb-2 block">
                   <Label htmlFor="Nombre Nave" value="Nombre Nave" />
                 </div>
-                <TextInput
-                  id="Nombre Nave"
-                  type="text"
-                  placeholder="Ingrese Nombre Nave"
-                  required
-                />
+                <Select id="Nombre Nave">
+                  <option value="0">Seleccione Nombre Nave</option>
+                  {allOptions.ships}
+                </Select>
               </div>
             </div>
           </Tabs.Item>
@@ -274,12 +271,10 @@ export default function Form() {
                 <div className="mb-2 block">
                   <Label htmlFor="Nombre" value="Nombre" />
                 </div>
-                <TextInput
-                  id="nombre"
-                  type="text"
-                  placeholder="Nombre"
-                  required
-                />
+                <Select id="Nombre">
+                  <option value="0">Seleccione Nombre</option>
+                  {allOptions.employees}
+                </Select>
               </div>
               <div>
                 <div className="mb-2 block">
