@@ -352,10 +352,12 @@ export default function Form() {
                 <Select
                   id={`employees`}
                   {...register(`workingEmployees.${index}.employee`)}
+                  {...getErrorProps(`workingEmployees.${index}.employee` as any)}
                 >
                   <option value="0">Seleccione Empleado</option>
                   {allOptions.employees}
                 </Select>
+                
 
                 <button type="button" onClick={() => remove(index)}>
                   Quitar
@@ -372,6 +374,7 @@ export default function Form() {
             {errors.workingEmployees?.message && (
               <p className="block border rounded-md m-2 p-2 bg-red-100 text-red-700/60 border-red-400 text-sm  ">
                 {errors.workingEmployees.message}
+                {}
               </p>
             )}
           </Tabs.Item>
