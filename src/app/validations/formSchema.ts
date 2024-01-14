@@ -36,31 +36,31 @@ export type Ships = (typeof ships)[number];
 export type InCharges = (typeof inCharges)[number];
 export type WorkTypes = (typeof workTypes)[number];
 
- const mappedCompanies: { [key in Companies]: string } = {
+const mappedCompanies: { [key in Companies]: string } = {
   compA: "Empresa A",
   compB: "Empresa B",
   compC: "Empresa C",
 };
 
- const mappedCenter: { [key in Center]: string } = {
+const mappedCenter: { [key in Center]: string } = {
   centerA: "Centro A",
   centerB: "Centro B",
   centerC: "Centro C",
 };
 
- const mappedTypeOfCages: { [key in TypeOfCages]: string } = {
+const mappedTypeOfCages: { [key in TypeOfCages]: string } = {
   typeA: "Tipo A",
   typeB: "Tipo B",
   typeC: "Tipo C",
 };
 
- const mappedEmployees: { [key in Employees]: string } = {
+const mappedEmployees: { [key in Employees]: string } = {
   empA: "Empleado A",
   empB: "Empleado B",
   empC: "Empleado C",
 };
 
- const mappedMaterials: { [key in Materials]: string } = {
+const mappedMaterials: { [key in Materials]: string } = {
   rope: "Cuerda",
   loberoThread: "Hilo de lobo",
   gasoline: "Gasolina",
@@ -68,7 +68,7 @@ export type WorkTypes = (typeof workTypes)[number];
   others: "Otros",
 };
 
- const mappedShips: {
+const mappedShips: {
   [key in Ships]: { name: string; registrationNumber: string };
 } = {
   shipA: { name: "Nave A", registrationNumber: "RegA123" },
@@ -76,13 +76,13 @@ export type WorkTypes = (typeof workTypes)[number];
   shipC: { name: "Nave C", registrationNumber: "RegC789" },
 };
 
- const mappedInCharges: { [key in InCharges]: string } = {
+const mappedInCharges: { [key in InCharges]: string } = {
   inChargeA: "Encargado A",
   inChargeB: "Encargado B",
   inChargeC: "Encargado C",
 };
 
- const mappedWorkTypes: { [key in WorkTypes]: string } = {
+const mappedWorkTypes: { [key in WorkTypes]: string } = {
   workTypeA: "Tipo de trabajo A",
   workTypeB: "Tipo de trabajo B",
   workTypeC: "Tipo de trabajo C",
@@ -91,15 +91,20 @@ export type WorkTypes = (typeof workTypes)[number];
 };
 
 export const mappedFormOptions = {
-    companies: mappedCompanies,
-    center: mappedCenter,
-    typeOfCages: mappedTypeOfCages,
-    employees: mappedEmployees,
-    materials: mappedMaterials,
-    ships: mappedShips,
-    inCharges: mappedInCharges,
-    workTypes: mappedWorkTypes,
-    };
+  companies: mappedCompanies,
+  center: mappedCenter,
+  typeOfCages: mappedTypeOfCages,
+  employees: mappedEmployees,
+  materials: mappedMaterials,
+  ships: mappedShips,
+  inCharges: mappedInCharges,
+  workTypes: mappedWorkTypes,
+};
+const employeeSchema = z.enum(employees, {
+  errorMap: () => ({
+    message: "Trabajador inválido, seleccione uno de la lista",
+  }),
+});
 
 export const formSchema = z.object({
   date: z
@@ -112,18 +117,25 @@ export const formSchema = z.object({
     errorMap: () => ({ message: "Empresa invalida" }),
   }),
   center: z.enum(center, { errorMap: () => ({ message: "Centro invalido" }) }),
-  typeOfCage: z.enum(typeOfcages, {
-    errorMap: () => ({ message: "Tipo de jaula invalido" }),
-  }).optional(),
+  typeOfCage: z
+    .enum(typeOfcages, {
+      errorMap: () => ({ message: "Tipo de jaula invalido" }),
+    })
+    .optional(),
   startTime: z.string().refine(validateTimeFormat, {
     message: "Formato de hora de inicio invalido (expected HH:MM)",
   }),
   endTime: z.string().refine(validateTimeFormat, {
     message: "Formato de hora de fin invalido (expected HH:MM)",
   }),
-  employee: z.enum(employees, {
-    errorMap: () => ({ message: "Trabajador invalido" }),
+  /*   employees: z.enum(employees, {
+    errorMap: () => ({ message: "Trabajador invalido , Selecione uno de la lista" }),
+  }), */
+  /* workingEmployees que es un arrai de al menos un elemento, y estos elementos pueden ser lo semployees */
+  workingEmployees: z.array(employeeSchema).min(1, {
+    message: "Debe haber al menos un trabajador",
   }),
+
   material: z.enum(materials, {
     errorMap: () => ({ message: "Material invalido" }),
   }),
@@ -136,7 +148,8 @@ export const formSchema = z.object({
   workType: z.enum(workTypes, {
     errorMap: () => ({ message: "Tipo de trabajo inválido" }),
   }),
-  workDetail: z.string().min(10, { message: "Debe completar los detalles del Trabajo (min: 10 caracteres)" }),
+  workDetail: z.string().min(10, {
+    message: "Debe completar los detalles del Trabajo (min: 10 caracteres)",
+  }),
   observations: z.string().optional(),
-
 });

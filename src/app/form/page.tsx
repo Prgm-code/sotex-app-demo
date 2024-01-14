@@ -11,29 +11,33 @@ import {
   Textarea,
 } from "flowbite-react";
 import { formSchema, mappedFormOptions } from "../validations/formSchema";
-import { useEffect, useState } from "react";
 
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { array } from "zod";
 
-const defaultValues = {
-  empresa: "",
-  centro: "",
-  tipojaula: "",
-  fecha: "",
-  hilo: "",
-  bencina: "",
-  petroleo: "",
-  otros: "",
-  horainicio: "",
-  horaTermino: "",
-  encargado: "",
-  trabajos: "",
-  matricula: "",
-  nombrenave: "",
-  nombre: "",
-  trabajosRealizados: "",
-  observaciones: "",
+type Inputs = {
+  company: string;
+  center: string;
+  employees: string;
+  workingEmployees: { employee: string }[];
+  typeOfCages: string;
+  loberoThread: string;
+  date: string;
+  rope: string;
+  gasoline: number;
+  oil: number;
+  others: string;
+  startTime: string;
+  endTime: string;
+  inCharges: string;
+  workTypes: string;
+  registrationNumber: string;
+  ships: string;
+  workDetail: string;
+  observations: string;
 };
+
 interface OptionElements {
   [key: string]: JSX.Element[];
 }
@@ -72,12 +76,40 @@ const allOptions = Object.entries(mappedFormOptions).reduce<OptionElements>(
 console.log(allOptions);
 
 export default function Form() {
+  const {
+    control,
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<Inputs>({
+    resolver: zodResolver(formSchema),
+    defaultValues: { workingEmployees: [{ employee: "0" }] },
+  });
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "workingEmployees",
+  });
+
+  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  console.log(errors);
+
+  const getErrorProps = (fieldName: keyof Inputs) => {
+    const errorMessage = errors[fieldName]?.message;
+    return errorMessage
+      ? {
+          color: "failure", // Establece el color a 'failure' si hay un error
+          helperText: errorMessage, // Muestra el mensaje de error
+        }
+      : {};
+  };
+
   return (
     <>
       <h2 className="text-xl font-bold text-center text-gray-900 sm:text-2xl lg:text-4xl xl:text-5xl mt-6">
         Fomulario de Reporte de trabajo
       </h2>
-      <form className="mb-10">
+      <form className="mb-10" onSubmit={handleSubmit(onSubmit)}>
         {/* create a form whit empresa, centro, tipode jaula . fecha  */}
         <Tabs
           aria-label="Tabs with underline"
@@ -91,7 +123,11 @@ export default function Form() {
                 <div className="mb-2 block">
                   <Label htmlFor="empresa" value="Empresa" />
                 </div>
-                <Select id="empresa" required>
+                <Select
+                  id="empresa"
+                  {...register("company")}
+                  {...getErrorProps("company")}
+                >
                   <option value="0" className="text-gray-500 ">
                     Seleccione Empresa
                   </option>
@@ -103,7 +139,11 @@ export default function Form() {
                 <div className="mb-2 block">
                   <Label htmlFor="centro" value="Centro" />
                 </div>
-                <Select id="centro">
+                <Select
+                  id="center"
+                  {...register("center")}
+                  {...getErrorProps("center")}
+                >
                   <option value="0">Seleccione Centro</option>
                   {allOptions.center}
                 </Select>
@@ -111,9 +151,13 @@ export default function Form() {
               {/* formularion para tipo de jaula  */}
               <div>
                 <div className="mb-2 block">
-                  <Label htmlFor="tipojaula" value="Tipo de jaula" />
+                  <Label htmlFor="typeOfCages" value="Tipo de jaula" />
                 </div>
-                <Select id="tipojaula">
+                <Select
+                  id="typeOfCages"
+                  {...register("typeOfCages")}
+                  {...getErrorProps("typeOfCages")}
+                >
                   <option value="0">Seleccione Tipo de Jaula</option>
                   {allOptions.typeOfCages}
                 </Select>
@@ -121,9 +165,16 @@ export default function Form() {
               {/* formularion para fecha  */}
               <div>
                 <div className="mb-2 block">
-                  <Label htmlFor="fecha" value="Fecha" />
+                  <Label htmlFor="date" value="Fecha" className="block " />
                 </div>
-                <Datepicker language="es" required />
+
+                <TextInput
+                  type="date"
+                  id="date"
+                  width={18}
+                  {...register("date")}
+                  {...getErrorProps("date")}
+                />
               </div>
             </div>
           </Tabs.Item>
@@ -143,63 +194,77 @@ export default function Form() {
             <div className="grid gap-6 mb-6 md:grid-cols-2 xl:grid-cols-3 ">
               <div>
                 <div className="mb-2 block">
-                  <Label htmlFor="hilo" value="Hilo Lobero" />
+                  <Label htmlFor="loberoThread" value="Hilo Lobero" />
                 </div>
                 <TextInput
-                  id="hilo"
+                  id="loberoThread"
                   type="text"
                   placeholder="Indique Cantidad de Hilo"
-                  required
+                  {...register("loberoThread")}
+                  {...getErrorProps("loberoThread")}
                 />
               </div>
               {/* formularion para centro  */}
               <div>
                 <div className="mb-2 block">
-                  <Label htmlFor="Bencina" value="Bencina" />
+                  <Label htmlFor="gasoline" value="Bencina" />
                 </div>
                 <TextInput
-                  id="Bencina"
-                  type="text"
+                  id="gasoline"
                   placeholder="Ingrese Bencina"
-                  required
+                  type="number"
+                  {...register("gasoline")}
+                  {...getErrorProps("gasoline")}
                 />
               </div>
               {/* formularion para tipo de jaula  */}
               <div>
                 <div className="mb-2 block">
-                  <Label htmlFor="petroleo" value="Cantidad de Petróleo" />
+                  <Label htmlFor="oil" value="Cantidad de Petróleo" />
                 </div>
                 <TextInput
-                  id="petroleo"
-                  type="text"
+                  id="oil"
+                  type="number"
                   placeholder="Cantidad de Petróleo"
-                  required
+                  {...register("oil")}
+                  {...getErrorProps("oil")}
                 />
               </div>
               {/* formularion para fecha  */}
               <div>
                 <div className="mb-2 block">
-                  <Label htmlFor="otros" value="Otros" />
+                  <Label htmlFor="others" value="Otros" />
                 </div>
                 <TextInput
-                  id="otros"
+                  id="others"
                   type="text"
                   placeholder="Otros"
-                  required
+                  {...register("others")}
+                  {...getErrorProps("others")}
                 />
               </div>
               {/* hora de inicio y hora de termino */}
               <div>
                 <div className="mb-2 block">
-                  <Label htmlFor="horainicio" value="Hora de Inicio" />
+                  <Label htmlFor="startTime" value="Hora de Inicio" />
                 </div>
-                <TextInput id="horainicio" type="time" required />
+                <TextInput
+                  id="startTime"
+                  type="time"
+                  {...register("startTime")}
+                  {...getErrorProps("startTime")}
+                />
               </div>
               <div>
                 <div className="mb-2 block">
-                  <Label htmlFor="horaTermino" value="Hora de Término" />
+                  <Label htmlFor="endTime" value="Hora de Término" />
                 </div>
-                <TextInput id="horaTermino" type="time" required />
+                <TextInput
+                  id="endTime"
+                  type="time"
+                  {...register("endTime")}
+                  {...getErrorProps("endTime")}
+                />
               </div>
             </div>
           </Tabs.Item>
@@ -214,9 +279,13 @@ export default function Form() {
             <div className="grid gap-6 mb-6 md:grid-cols-2 xl:grid-cols-2 ">
               <div>
                 <div className="mb-2 block">
-                  <Label htmlFor="Encargado" value="Encargado" />
+                  <Label htmlFor="inCharges" value="Encargado" />
                 </div>
-                <Select id="Encargado" required>
+                <Select
+                  id="inCharges"
+                  {...register("inCharges")}
+                  {...getErrorProps("inCharges")}
+                >
                   <option value="0">Seleccione Encargado</option>
                   {allOptions.employees}
                 </Select>
@@ -224,32 +293,41 @@ export default function Form() {
               {/* formularion para centro  */}
               <div>
                 <div className="mb-2 block">
-                  <Label htmlFor="Trabajos" value="Trabajos" />
+                  <Label htmlFor="workTypes" value="Trabajos" />
                 </div>
 
-                <Select id="Trabajos">
+                <Select
+                  id="workTypes"
+                  {...register("workTypes")}
+                  {...getErrorProps("workTypes")}
+                >
                   <option value="0">Seleccione Trabajos</option>
                   {allOptions.workTypes}
                 </Select>
               </div>
-              {/* formularion para fecha  */}
+              {/*  */}
               <div>
                 <div className="mb-2 block">
-                  <Label htmlFor="Matricula" value="Matrícula" />
+                  <Label htmlFor="registrationNumber" value="Matrícula" />
                 </div>
                 <TextInput
-                  id="Matricula"
+                  id="registrationNumber"
                   type="text"
                   placeholder="Matrícula Embarcación"
-                  required
+
+                  /*TODO: integrar registrationNumber a zod */
                 />
               </div>
               {/* formularion para tipo de jaula  */}
               <div>
                 <div className="mb-2 block">
-                  <Label htmlFor="Nombre Nave" value="Nombre Nave" />
+                  <Label htmlFor="ships" value="Nombre Nave" />
                 </div>
-                <Select id="Nombre Nave">
+                <Select
+                  id="ships"
+                  {...register("ships")}
+                  {...getErrorProps("ships")}
+                >
                   <option value="0">Seleccione Nombre Nave</option>
                   {allOptions.ships}
                 </Select>
@@ -265,73 +343,37 @@ export default function Form() {
           className="max-w-sm  md:max-w-xl xl:max-w-5xl mx-auto pt-6 "
         >
           <Tabs.Item title="Personal de Faena" active={true} className="block">
-            {/* titulo de formulario */}
-            <div className="grid gap-6 mb-6 md:grid-cols-2 xl:grid-cols-3 ">
-              <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="Nombre" value="Nombre" />
-                </div>
-                <Select id="Nombre">
-                  <option value="0">Seleccione Nombre</option>
+            {fields.map((field, index) => (
+              <div key={field.id}>
+                <Label
+                  htmlFor={`workingEmployees[${index}].employee`}
+                  value={`Empleado ${index + 1}`}
+                  />
+                <Select
+                  id={`employees`}
+                  {...register(`workingEmployees.${index}.employee`)}
+                >
+                  <option value="0">Seleccione Empleado</option>
                   {allOptions.employees}
                 </Select>
+
+                <button type="button" onClick={() => remove(index)}>
+                  Quitar
+                </button>
               </div>
-              <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="Nombre" value="Nombre" />
-                </div>
-                <TextInput
-                  id="nombre"
-                  type="text"
-                  placeholder="Nombre"
-                  required
-                />
-              </div>
-              <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="Nombre" value="Nombre" />
-                </div>
-                <TextInput
-                  id="nombre"
-                  type="text"
-                  placeholder="Nombre"
-                  required
-                />
-              </div>
-              <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="Nombre" value="Nombre" />
-                </div>
-                <TextInput
-                  id="nombre"
-                  type="text"
-                  placeholder="Nombre"
-                  required
-                />
-              </div>
-              <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="Nombre" value="Nombre" />
-                </div>
-                <TextInput
-                  id="nombre"
-                  type="text"
-                  placeholder="Nombre"
-                  required
-                />
-              </div>
-              <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="Nombre" value="Nombre" />
-                </div>
-                <TextInput
-                  id="nombre"
-                  type="text"
-                  placeholder="Nombre"
-                  required
-                />
-              </div>
-            </div>
+            ))}
+            <button type="button" onClick={() => append({ employee: "0" })}>
+              <span className="text-sm font-semibold">
+                {" "}
+                Agregar Trabajador a la lista +
+              </span>{" "}
+            </button>
+
+            {errors.workingEmployees?.message && (
+              <p className="block border rounded-md m-2 p-2 bg-red-100 text-red-700/60 border-red-400 text-sm  ">
+                {errors.workingEmployees.message}
+              </p>
+            )}
           </Tabs.Item>
         </Tabs>
         <Tabs
@@ -344,36 +386,35 @@ export default function Form() {
             <div className="grid gap-6 mb-6 grid-cols-1">
               <div>
                 <div className="mb-2 block">
-                  <Label
-                    htmlFor="trabajosRealizados"
-                    value="Trabajos Realizados"
-                  />
+                  <Label htmlFor="workDetail" value="Trabajos Realizados" />
                 </div>
                 <Textarea
-                  id="trabajosRealizados"
+                  id="workDetail"
                   placeholder="Ingrese el detalle de los trabajos realizados"
                   className="h-48 block w-full"
-                  color="failure"
-                  required
+                  {...register("workDetail")}
+                  {...getErrorProps("workDetail")}
                 />
               </div>
               <div>
                 <div className="mb-2 block">
                   <Label
-                    htmlFor="observaciones"
+                    htmlFor="observations"
                     value="Observaciones y/o Sugerencias"
                   />
                 </div>
                 <Textarea
-                  id="observaciones"
+                  id="observations"
                   placeholder="Ingrese Observaciones y/o Sugerencias"
                   className="h-24 block w-full"
-                  required
+                  {...register("observations")}
+                  {...getErrorProps("observations")}
                 />
               </div>
             </div>
           </Tabs.Item>
         </Tabs>
+        <div>{JSON.stringify(watch(), null, 2)}</div>
 
         <Button className="mx-auto" type="submit">
           Submit
