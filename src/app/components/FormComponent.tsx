@@ -49,14 +49,11 @@ interface OptionElements {
   [key: string]: JSX.Element[];
 }
 
-interface  itemsArrayProps {
+interface itemsArrayProps {
   detail: string;
   material: string;
   employee: string;
-
-
 }
-
 
 const generateOptions = (mappedData: { [key: string]: any }) => {
   const options: JSX.Element[] = [];
@@ -91,7 +88,7 @@ const allOptions = Object.entries(mappedFormOptions).reduce<OptionElements>(
 
 console.log(allOptions);
 
-export default function Form({agregarObjeto}: {agregarObjeto: any}) {
+export default function Form({ agregarObjeto }: { agregarObjeto: any }) {
   const {
     control,
     register,
@@ -120,11 +117,10 @@ export default function Form({agregarObjeto}: {agregarObjeto: any}) {
   });
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-  
     agregarObjeto(data);
-    console.log(data)
+    console.log(data);
     /* limpia el formulario  */
-     reset();
+    reset();
   };
   console.log(errors);
   /* verificar que el error venga en un array si es ek caso de workingEMployees */
@@ -151,7 +147,8 @@ export default function Form({agregarObjeto}: {agregarObjeto: any}) {
       // Correctly typed access to nested array errors
       const fieldError = errors[fieldName];
       if (Array.isArray(fieldError)) {
-        errorMessage = fieldError[index]?.[item as keyof itemsArrayProps]?.message;
+        errorMessage =
+          fieldError[index]?.[item as keyof itemsArrayProps]?.message;
       }
     } else {
       errorMessage = errors[fieldName]?.message;
@@ -168,7 +165,7 @@ export default function Form({agregarObjeto}: {agregarObjeto: any}) {
   return (
     <>
       <h2 className="text-xl font-bold text-center text-gray-900 sm:text-2xl lg:text-4xl xl:text-5xl mt-6">
-        Fomulario de Reporte de trabajo
+      Formulario de Reporte de trabajo
       </h2>
       <form className="mb-10" onSubmit={handleSubmit(onSubmit)}>
         {/* create a form whit empresa, centro, tipode jaula . fecha  */}
@@ -248,7 +245,7 @@ export default function Form({agregarObjeto}: {agregarObjeto: any}) {
           className="max-w-sm  md:max-w-xl xl:max-w-5xl mx-auto pt-6 "
         >
           <Tabs.Item
-            title="Hora de Inicio y Termino"
+            title="Hora de Inicio y Término"
             active={true}
             className="block"
           >
@@ -286,48 +283,67 @@ export default function Form({agregarObjeto}: {agregarObjeto: any}) {
         >
           <Tabs.Item title="Materiales Usados" active={true} className="block">
             {materialsFields.map((field, index) => (
-              <div key={field.id} className="grid grid-cols-2 gap-4">
-                <div>
-                  <div className="mb-2 block">
-                    <Label
-                      htmlFor={`usedMaterials.${index}.material`}
-                      value="Material"
-                    ></Label>
+              <>
+                <div key={field.id} className="grid grid-cols-2 gap-4">
+                  <div>
+                    <div className="mb-2 block">
+                      <Label
+                        htmlFor={`usedMaterials.${index}.material`}
+                        value="Material"
+                      ></Label>
+                    </div>
+                    <Select
+                      {...register(`usedMaterials.${index}.material`)}
+                      {...getErrorPropsArray(
+                        errors,
+                        "usedMaterials",
+                        "material",
+                        index
+                      )}
+                    >
+                      <option value="0">Seleccione Material</option>
+                      {allOptions.materials}
+                      {/* Opciones de materiales */}
+                    </Select>
                   </div>
-                  <Select
-                    {...register(`usedMaterials.${index}.material`)}
-                    {...getErrorPropsArray(errors, "usedMaterials", "material", index)}
-                  >
-                    <option value="0">Seleccione Material</option>
-                    {allOptions.materials}
-                    {/* Opciones de materiales */}
-                  </Select>
-                </div>
-                <div>
-                  <div className="mb-2 block">
-                    <Label
-                      htmlFor={`usedMaterials.${index}.detail`}
-                      value="Cantidad"
-                    ></Label>
+                  <div>
+                    <div className="mb-2 block">
+                      <Label
+                        htmlFor={`usedMaterials.${index}.detail`}
+                        value="Cantidad"
+                      ></Label>
+                    </div>
+                    <TextInput
+                      type="string"
+                      placeholder="Cantidad"
+                      {...register(`usedMaterials.${index}.detail`)}
+                      {...getErrorPropsArray(
+                        errors,
+                        "usedMaterials",
+                        "detail",
+                        index
+                      )}
+                    />
                   </div>
-                  <TextInput
-                    type="string"
-                    placeholder="Cantidad"
-                    {...register(`usedMaterials.${index}.detail`)}
-                    {...getErrorPropsArray(errors, "usedMaterials", "detail", index )}
-                  />
                 </div>
-                <button type="button" onClick={() => materialsRemove(index)}>
-                  Quitar Material
-                </button>
-              </div>
+                <Button
+                  className="border-gray-300 hover:text-gray-700 p-2 mt-2"
+                  size="sm"
+                  color="gray"
+                  onClick={() => materialsRemove(index)}
+                >
+                  <span className="text-sm"> Quitar Material -</span>
+                </Button>
+              </>
             ))}
-            <button
-              type="button"
+            <Button
+              className="border-gray-300 hover:text-gray-700 p-2 mt-2"
+              size="sm"
+              color="gray"
               onClick={() => materialsAppend({ material: "0", detail: "" })}
             >
-              Añadir Material
-            </button>
+              <span className="text-sm">Añadir Material +</span>
+            </Button>
             {errors.usedMaterials?.message && (
               <p className="block border rounded-md m-2 p-2 bg-red-100 text-red-700/60 border-red-400 text-sm  ">
                 {errors.usedMaterials.message}
@@ -420,24 +436,35 @@ export default function Form({agregarObjeto}: {agregarObjeto: any}) {
                 <Select
                   id={`workingEmployees`}
                   {...register(`workingEmployees.${index}.employee`)}
-                  {...getErrorPropsArray(errors, "workingEmployees", "employee", index)}
-                  
+                  {...getErrorPropsArray(
+                    errors,
+                    "workingEmployees",
+                    "employee",
+                    index
+                  )}
                 >
                   <option value="0">Seleccione Nombre del Personal</option>
                   {allOptions.employees}
                 </Select>
 
-                <button type="button" onClick={() => remove(index)}>
-                  Quitar
-                </button>
+                <Button
+                  className="border-gray-300 hover:text-gray-700 p-2 mt-2"
+                  size="sm"
+                  color="gray"
+                  onClick={() => remove(index)}
+                >
+                  <span className="text-sm"> Quitar Personal -</span>
+                </Button>
               </div>
             ))}
-            <button type="button" onClick={() => append({ employee: "0" })}>
-              <span className="text-sm font-semibold">
-                {" "}
-                Agregar Personal a la lista +
-              </span>{" "}
-            </button>
+            <Button
+              className="border-gray-300 hover:text-gray-700 p-2 mt-2"
+              size={"sm"}
+              color="gray"
+              onClick={() => append({ employee: "0" })}
+            >
+              <span className="text-sm ">Añadir Personal +</span>
+            </Button>
 
             {errors.workingEmployees?.message && (
               <p className="block border rounded-md m-2 p-2 bg-red-100 text-red-700/60 border-red-400 text-sm  ">
@@ -485,10 +512,10 @@ export default function Form({agregarObjeto}: {agregarObjeto: any}) {
             </div>
           </Tabs.Item>
         </Tabs>
-{/*         <div>{JSON.stringify(watch(), null, 2)}</div> */}
+        {/*         <div>{JSON.stringify(watch(), null, 2)}</div> */}
 
         <Button className="mx-auto" type="submit">
-          Submit
+          Enviar
         </Button>
       </form>
     </>

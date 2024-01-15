@@ -106,23 +106,23 @@ export const formSchema = z.object({
   date: z
     .string()
     .refine((dow) => new Date(dow).toString() !== "Invalid Date", {
-      message: "Fecha invalida",
+      message: "Fecha inválido",
     }),
 
   company: z.enum(companies, {
-    errorMap: () => ({ message: "Empresa invalida" }),
+    errorMap: () => ({ message: "Empresa inválida" }),
   }),
-  center: z.enum(center, { errorMap: () => ({ message: "Centro invalido" }) }),
+  center: z.enum(center, { errorMap: () => ({ message: "Centro inválido" }) }),
   typeOfCage: z
     .enum(typeOfcages, {
       errorMap: () => ({ message: "Tipo de jaula invalido" }),
     })
     .optional(),
   startTime: z.string().refine(validateTimeFormat, {
-    message: "Formato de hora de inicio invalido (expected HH:MM)",
+    message: "Formato de hora de inicio inválido (expected HH:MM)",
   }),
   endTime: z.string().refine(validateTimeFormat, {
-    message: "Formato de hora de fin invalido (expected HH:MM)",
+    message: "Formato de hora de fin inválido (expected HH:MM)",
   }),
   
   /* workingEmployees que es un arrai de al menos un elemento, y estos elementos pueden ser lo semployees */

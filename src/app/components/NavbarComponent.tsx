@@ -21,9 +21,12 @@ export default function NavbarComponent({
 
   return (
     <Navbar fluid={true} rounded={true}>
-      <Navbar.Brand href="https://www.linkedin.com/in/masterproquality/">
+      <Navbar.Brand href="https://www.linkedin.com/in/masterproquality/" 
+      target="_blank" rel="noopener noreferrer"
+      >
         <Image
           src="/1669380754322.webp"
+
           className="mr-3 h-6 sm:h-9 "
           alt="Flowbite Logo"
           width={36}
