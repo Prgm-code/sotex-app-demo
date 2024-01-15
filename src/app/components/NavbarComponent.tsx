@@ -3,7 +3,22 @@
 import { Navbar } from "flowbite-react";
 import Image from "next/image";
 
-export default function NavbarComponent() {
+// Define a TypeScript type for your props
+type NavbarComponentProps = {
+  handleLogout: () => void;
+  handleSetActiveView: (view: string) => void;
+};
+
+// Use the type with your functional component
+export default function NavbarComponent({
+  handleLogout,
+  handleSetActiveView,
+}: NavbarComponentProps) {
+  const handleButtonForm = (view: string) => {
+    console.log(view);
+    handleSetActiveView(view);
+  };
+
   return (
     <Navbar fluid={true} rounded={true}>
       <Navbar.Brand href="https://www.linkedin.com/in/masterproquality/">
@@ -15,18 +30,41 @@ export default function NavbarComponent() {
           height={36}
         />
         <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-        Master Pro Quality (MPQ)
+          Master Pro Quality (MPQ)
         </span>
       </Navbar.Brand>
       <Navbar.Toggle />
       <Navbar.Collapse>
-        <Navbar.Link href="/form" active={true}>
+        <Navbar.Link
+          onClick={() => {
+            handleButtonForm("home");
+          }}
+        >
           Home
         </Navbar.Link>
-        <Navbar.Link href="/">About</Navbar.Link>
-        <Navbar.Link href="/">Services</Navbar.Link>
-        <Navbar.Link href="/">Pricing</Navbar.Link>
-        <Navbar.Link href="/">Contact</Navbar.Link>
+        <Navbar.Link
+          onClick={() => {
+            handleButtonForm("form");
+          }}
+        >
+          Ingresar Reporte
+        </Navbar.Link>
+        <Navbar.Link
+          onClick={() => {
+            handleButtonForm("view");
+          }}
+        >
+          Visualizar Reportes
+        </Navbar.Link>
+
+        <Navbar.Link
+          className="border-2 border-blue-500 hover:bg-blue-500 hover:text-white text-blue-500 font-bold py-2 px-4 rounded"
+          onClick={() => {
+            handleLogout();
+          }}
+        >
+          Logout
+        </Navbar.Link>
       </Navbar.Collapse>
     </Navbar>
   );
