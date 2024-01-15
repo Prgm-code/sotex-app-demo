@@ -100,11 +100,7 @@ export const mappedFormOptions = {
   inCharges: mappedInCharges,
   workTypes: mappedWorkTypes,
 };
-const employeeSchema = z.enum(employees, {
-  errorMap: () => ({
-    message: "Trabajador inválido, seleccione uno de la lista",
-  }),
-});
+
 
 export const formSchema = z.object({
   date: z
@@ -128,11 +124,15 @@ export const formSchema = z.object({
   endTime: z.string().refine(validateTimeFormat, {
     message: "Formato de hora de fin invalido (expected HH:MM)",
   }),
-  /*   employees: z.enum(employees, {
-    errorMap: () => ({ message: "Trabajador invalido , Selecione uno de la lista" }),
-  }), */
+  
   /* workingEmployees que es un arrai de al menos un elemento, y estos elementos pueden ser lo semployees */
-  workingEmployees: z.array(z.string()).min(1, {
+  workingEmployees: z.array(z.object({
+    employee: z.enum(employees, {
+        errorMap: () => ({ message: "Trabajador invalido , Selecione uno de la lista" }),
+        }),
+    })
+).min(1, {
+  
     message: "Debe haber al menos un trabajador",
   }),
 
@@ -150,11 +150,11 @@ export const formSchema = z.object({
 }),
 
 
-  ship: z.enum(ships, { errorMap: () => ({ message: "Barco inválido" }) }),
-  inCharge: z.enum(inCharges, {
+  ships: z.enum(ships, { errorMap: () => ({ message: "Barco inválido" }) }),
+  inCharges: z.enum(inCharges, {
     errorMap: () => ({ message: "Encargado inválido" }),
   }),
-  workType: z.enum(workTypes, {
+  workTypes: z.enum(workTypes, {
     errorMap: () => ({ message: "Tipo de trabajo inválido" }),
   }),
   workDetail: z.string().min(10, {

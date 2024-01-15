@@ -49,9 +49,10 @@ interface OptionElements {
   [key: string]: JSX.Element[];
 }
 
-interface  itemMaterial {
+interface  itemsArrayProps {
   detail: string;
   material: string;
+  employee: string;
 
 
 }
@@ -134,7 +135,7 @@ export default function Form() {
   const getErrorPropsArray = (
     errors: FieldErrors<Inputs>,
     fieldName: keyof Inputs,
-    item: keyof itemMaterial,
+    item: keyof itemsArrayProps,
     index?: number
   ) => {
     let errorMessage: string | undefined;
@@ -143,7 +144,7 @@ export default function Form() {
       // Correctly typed access to nested array errors
       const fieldError = errors[fieldName];
       if (Array.isArray(fieldError)) {
-        errorMessage = fieldError[index]?.[item as keyof itemMaterial]?.message;
+        errorMessage = fieldError[index]?.[item as keyof itemsArrayProps]?.message;
       }
     } else {
       errorMessage = errors[fieldName]?.message;
@@ -328,6 +329,7 @@ export default function Form() {
             )}
           </Tabs.Item>
         </Tabs>
+        {/* Formulario Embarcacónm */}
         <Tabs
           aria-label="Tabs with underline"
           style="underline"
@@ -411,9 +413,10 @@ export default function Form() {
                 <Select
                   id={`workingEmployees`}
                   {...register(`workingEmployees.${index}.employee`)}
-                  {...getErrorProps(`workingEmployees` as any)}
+                  {...getErrorPropsArray(errors, "workingEmployees", "employee", index)}
+                  
                 >
-                  <option value="0">Seleccione Nombre del Trabajador</option>
+                  <option value="0">Seleccione Nombre del Personal</option>
                   {allOptions.employees}
                 </Select>
 
@@ -425,7 +428,7 @@ export default function Form() {
             <button type="button" onClick={() => append({ employee: "0" })}>
               <span className="text-sm font-semibold">
                 {" "}
-                Agregar Trabajador a la lista +
+                Agregar Personal a la lista +
               </span>{" "}
             </button>
 
