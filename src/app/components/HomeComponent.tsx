@@ -34,14 +34,14 @@ function HomeComponent({ handleSetActiveView }: { handleSetActiveView: (view: st
             onClick={() => handleButtonForm()}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-center"
           >
-            Ingresar Reporte
+            Ingresar Faena
           </Button>
 
           <Button
             onClick={() => handleButtonView()}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-center"
           >
-            Visualizar Reportes
+            Faenas Realizadas
           </Button>
         </div>
       </div>

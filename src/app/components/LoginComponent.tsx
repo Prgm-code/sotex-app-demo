@@ -9,21 +9,21 @@ export default function LoginComponent({ handleLogin }: { handleLogin: any }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleClick  = (username: string, password: string) => {
-   const res =  handleLogin(username, password);
+  const handleClick = (username: string, password: string) => {
+    const res = handleLogin(username, password);
     console.log(res);
-  }
-
+  };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex flex-col items-center justify-between p-10">
+      <h2 className="text-3xl font-bold text-center my-5">Acceso al Sistema</h2>
       <Card className="max-w-sm">
-        <form className="flex flex-col gap-4"
-        onSubmit={(e) => {
+        <form
+          className="flex flex-col gap-4"
+          onSubmit={(e) => {
             e.preventDefault();
             handleClick(username, password);
-
-        }}
+          }}
         >
           <div className="mx-auto">
             <Image
@@ -43,21 +43,25 @@ export default function LoginComponent({ handleLogin }: { handleLogin: any }) {
               type="email"
               placeholder="name@mpq.com"
               required
-              onChange={(e) =>{
+              onChange={(e) => {
                 e.preventDefault();
                 setUsername(e.target.value);
-              }}   
+              }}
             />
           </div>
           <div>
             <div className="mb-2 block">
               <Label htmlFor="password1" value="Ingrese Password" />
             </div>
-            <TextInput id="password1" type="password" required 
-            onChange={(e) =>{
+            <TextInput
+              id="password1"
+              type="password"
+              required
+              onChange={(e) => {
                 e.preventDefault();
                 setPassword(e.target.value);
-            }}   />
+              }}
+            />
           </div>
           <div className="flex items-center gap-2">
             <Checkbox id="remember" />

@@ -47,14 +47,14 @@ export default function NavbarComponent({
             handleButtonForm("form");
           }}
         >
-          Ingresar Reporte
+          Formulario de Faena
         </Navbar.Link>
         <Navbar.Link
           onClick={() => {
             handleButtonForm("view");
           }}
         >
-          Visualizar Reportes
+          Visualizar Faenas
         </Navbar.Link>
 
         <Navbar.Link

@@ -91,13 +91,14 @@ const allOptions = Object.entries(mappedFormOptions).reduce<OptionElements>(
 
 console.log(allOptions);
 
-export default function Form() {
+export default function Form({agregarObjeto}: {agregarObjeto: any}) {
   const {
     control,
     register,
     handleSubmit,
     watch,
     formState: { errors },
+    reset,
   } = useForm<Inputs>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -118,7 +119,13 @@ export default function Form() {
     name: "usedMaterials",
   });
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  
+    agregarObjeto(data);
+    console.log(data)
+    /* limpia el formulario  */
+     reset();
+  };
   console.log(errors);
   /* verificar que el error venga en un array si es ek caso de workingEMployees */
 
