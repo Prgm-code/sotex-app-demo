@@ -12,7 +12,12 @@ import {
 } from "flowbite-react";
 import { formSchema, mappedFormOptions } from "../validations/formSchema";
 
-import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
+import {
+  useForm,
+  SubmitHandler,
+  useFieldArray,
+  FieldErrors,
+} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { array } from "zod";
 
@@ -36,11 +41,21 @@ type Inputs = {
   ships: string;
   workDetail: string;
   observations: string;
+  materials: string;
+  usedMaterials: { material: string; detail: string }[];
 };
 
 interface OptionElements {
   [key: string]: JSX.Element[];
 }
+
+interface  itemMaterial {
+  detail: string;
+  material: string;
+
+
+}
+
 
 const generateOptions = (mappedData: { [key: string]: any }) => {
   const options: JSX.Element[] = [];
@@ -84,15 +99,27 @@ export default function Form() {
     formState: { errors },
   } = useForm<Inputs>({
     resolver: zodResolver(formSchema),
-    defaultValues: { workingEmployees: [{ employee: "0" }] },
+    defaultValues: {
+      workingEmployees: [{ employee: "0" }],
+      usedMaterials: [{ material: "0", detail: "" }],
+    },
   });
   const { fields, append, remove } = useFieldArray({
     control,
     name: "workingEmployees",
   });
+  const {
+    fields: materialsFields,
+    append: materialsAppend,
+    remove: materialsRemove,
+  } = useFieldArray({
+    control,
+    name: "usedMaterials",
+  });
 
   const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
   console.log(errors);
+  /* verificar que el error venga en un array si es ek caso de workingEMployees */
 
   const getErrorProps = (fieldName: keyof Inputs) => {
     const errorMessage = errors[fieldName]?.message;
@@ -100,6 +127,32 @@ export default function Form() {
       ? {
           color: "failure", // Establece el color a 'failure' si hay un error
           helperText: errorMessage, // Muestra el mensaje de error
+        }
+      : {};
+  };
+
+  const getErrorPropsArray = (
+    errors: FieldErrors<Inputs>,
+    fieldName: keyof Inputs,
+    item: keyof itemMaterial,
+    index?: number
+  ) => {
+    let errorMessage: string | undefined;
+
+    if (typeof index === "number") {
+      // Correctly typed access to nested array errors
+      const fieldError = errors[fieldName];
+      if (Array.isArray(fieldError)) {
+        errorMessage = fieldError[index]?.[item as keyof itemMaterial]?.message;
+      }
+    } else {
+      errorMessage = errors[fieldName]?.message;
+    }
+
+    return errorMessage
+      ? {
+          color: "failure",
+          helperText: errorMessage,
         }
       : {};
   };
@@ -180,70 +233,18 @@ export default function Form() {
           </Tabs.Item>
         </Tabs>
 
+        {/* hora de inicio y hora de termino */}
         <Tabs
           aria-label="Tabs with underline"
           style="underline"
           className="max-w-sm  md:max-w-xl xl:max-w-5xl mx-auto pt-6 "
         >
-          <Tabs.Item title="Materiales" active={true} className="block">
-            {/* titulo de formulario */}
-            {/* TODO: make a select list to add diffrents kinds of materials from allOptions.materials */}
-
-            {}
-
-            <div className="grid gap-6 mb-6 md:grid-cols-2 xl:grid-cols-3 ">
-              <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="loberoThread" value="Hilo Lobero" />
-                </div>
-                <TextInput
-                  id="loberoThread"
-                  type="text"
-                  placeholder="Indique Cantidad de Hilo"
-                  {...register("loberoThread")}
-                  {...getErrorProps("loberoThread")}
-                />
-              </div>
-              {/* formularion para centro  */}
-              <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="gasoline" value="Bencina" />
-                </div>
-                <TextInput
-                  id="gasoline"
-                  placeholder="Ingrese Bencina"
-                  type="number"
-                  {...register("gasoline")}
-                  {...getErrorProps("gasoline")}
-                />
-              </div>
-              {/* formularion para tipo de jaula  */}
-              <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="oil" value="Cantidad de Petróleo" />
-                </div>
-                <TextInput
-                  id="oil"
-                  type="number"
-                  placeholder="Cantidad de Petróleo"
-                  {...register("oil")}
-                  {...getErrorProps("oil")}
-                />
-              </div>
-              {/* formularion para fecha  */}
-              <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="others" value="Otros" />
-                </div>
-                <TextInput
-                  id="others"
-                  type="text"
-                  placeholder="Otros"
-                  {...register("others")}
-                  {...getErrorProps("others")}
-                />
-              </div>
-              {/* hora de inicio y hora de termino */}
+          <Tabs.Item
+            title="Hora de Inicio y Termino"
+            active={true}
+            className="block"
+          >
+            <div className="grid gap-6 mb-6 md:grid-cols-2 xl:grid-cols-2 ">
               <div>
                 <div className="mb-2 block">
                   <Label htmlFor="startTime" value="Hora de Inicio" />
@@ -269,6 +270,64 @@ export default function Form() {
             </div>
           </Tabs.Item>
         </Tabs>
+        {/* Formulario de Materiales */}
+        <Tabs
+          aria-label="Tabs with underline"
+          style="underline"
+          className="max-w-sm  md:max-w-xl xl:max-w-5xl mx-auto pt-6 "
+        >
+          <Tabs.Item title="Materiales Usados" active={true} className="block">
+            {materialsFields.map((field, index) => (
+              <div key={field.id} className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="mb-2 block">
+                    <Label
+                      htmlFor={`usedMaterials.${index}.material`}
+                      value="Material"
+                    ></Label>
+                  </div>
+                  <Select
+                    {...register(`usedMaterials.${index}.material`)}
+                    {...getErrorPropsArray(errors, "usedMaterials", "material", index)}
+                  >
+                    <option value="0">Seleccione Material</option>
+                    {allOptions.materials}
+                    {/* Opciones de materiales */}
+                  </Select>
+                </div>
+                <div>
+                  <div className="mb-2 block">
+                    <Label
+                      htmlFor={`usedMaterials.${index}.detail`}
+                      value="Cantidad"
+                    ></Label>
+                  </div>
+                  <TextInput
+                    type="string"
+                    placeholder="Cantidad"
+                    {...register(`usedMaterials.${index}.detail`)}
+                    {...getErrorPropsArray(errors, "usedMaterials", "detail", index )}
+                  />
+                </div>
+                <button type="button" onClick={() => materialsRemove(index)}>
+                  Quitar Material
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => materialsAppend({ material: "0", detail: "" })}
+            >
+              Añadir Material
+            </button>
+            {errors.usedMaterials?.message && (
+              <p className="block border rounded-md m-2 p-2 bg-red-100 text-red-700/60 border-red-400 text-sm  ">
+                {errors.usedMaterials.message}
+                {}
+              </p>
+            )}
+          </Tabs.Item>
+        </Tabs>
         <Tabs
           aria-label="Tabs with underline"
           style="underline"
@@ -287,7 +346,7 @@ export default function Form() {
                   {...getErrorProps("inCharges")}
                 >
                   <option value="0">Seleccione Encargado</option>
-                  {allOptions.employees}
+                  {allOptions.inCharges}
                 </Select>
               </div>
               {/* formularion para centro  */}
@@ -348,16 +407,15 @@ export default function Form() {
                 <Label
                   htmlFor={`workingEmployees[${index}].employee`}
                   value={`Empleado ${index + 1}`}
-                  />
+                />
                 <Select
-                  id={`employees`}
+                  id={`workingEmployees`}
                   {...register(`workingEmployees.${index}.employee`)}
-                  {...getErrorProps(`workingEmployees.${index}.employee` as any)}
+                  {...getErrorProps(`workingEmployees` as any)}
                 >
-                  <option value="0">Seleccione Empleado</option>
+                  <option value="0">Seleccione Nombre del Trabajador</option>
                   {allOptions.employees}
                 </Select>
-                
 
                 <button type="button" onClick={() => remove(index)}>
                   Quitar

@@ -132,14 +132,23 @@ export const formSchema = z.object({
     errorMap: () => ({ message: "Trabajador invalido , Selecione uno de la lista" }),
   }), */
   /* workingEmployees que es un arrai de al menos un elemento, y estos elementos pueden ser lo semployees */
-  workingEmployees: z.array(employeeSchema).min(1, {
+  workingEmployees: z.array(z.string()).min(1, {
     message: "Debe haber al menos un trabajador",
   }),
 
-  material: z.enum(materials, {
-    errorMap: () => ({ message: "Material invalido" }),
-  }),
-  quantity: z.number().min(0, { message: "Cantidad invalida" }),
+  usedMaterials: z.array(
+    z.object({
+        material: z.enum(materials, {
+            errorMap: () => ({ message: "Material inválido" }),
+        }),
+        detail: z.string().min(1, {
+            message: "Debe completar el detalle del material",
+        }),
+    })
+).min(1, {
+    message: "Debe añadir al menos un material",
+}),
+
 
   ship: z.enum(ships, { errorMap: () => ({ message: "Barco inválido" }) }),
   inCharge: z.enum(inCharges, {
