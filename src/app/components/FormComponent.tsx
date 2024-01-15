@@ -485,7 +485,7 @@ export default function Form({agregarObjeto}: {agregarObjeto: any}) {
             </div>
           </Tabs.Item>
         </Tabs>
-        <div>{JSON.stringify(watch(), null, 2)}</div>
+{/*         <div>{JSON.stringify(watch(), null, 2)}</div> */}
 
         <Button className="mx-auto" type="submit">
           Submit
