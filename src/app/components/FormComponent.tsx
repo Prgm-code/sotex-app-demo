@@ -181,7 +181,7 @@ export default function Form({ agregarObjeto, handleSetActiveView }: { agregarOb
       ></div>
 
       <h2 className="text-3xl font-bold text-center text-gray-900 sm:text-2xl lg:text-4xl xl:text-5xl pt-20 ">
-        Formulario Analisís de Calidad
+        Formulario Ingreso Datos de Faena
       </h2>
       <form className="" onSubmit={handleSubmit(onSubmit)}>
         {/* create a form whit empresa, centro, tipode jaula . fecha  */}
