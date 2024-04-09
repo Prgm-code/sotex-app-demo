@@ -20,20 +20,24 @@ export default function NavbarComponent({
   };
 
   return (
-    <Navbar fluid={true} rounded={true}>
-      <Navbar.Brand href="https://www.linkedin.com/in/masterproquality/" 
+    <div className="bg-opacity-90 bg-white shadow-md fixed top-0 left-0 right-0 z-50 h-14"> 
+
+    <Navbar fluid={true} rounded={true}
+      className="bg-white dark:bg-gray-800 shadow-lg position-relative"
+    >
+
+      <Navbar.Brand href="" 
       target="_blank" rel="noopener noreferrer"
       >
         <Image
-          src="/1669380754322.webp"
-
+          src="/sotex/only_logo.png"
           className="mr-3 h-6 sm:h-9 "
-          alt="Flowbite Logo"
+          alt="Sotex_logo"
           width={36}
           height={36}
         />
         <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-          Master Pro Quality (MPQ)
+        Sistema de Gestión
         </span>
       </Navbar.Brand>
       <Navbar.Toggle />
@@ -50,14 +54,14 @@ export default function NavbarComponent({
             handleButtonForm("form");
           }}
         >
-          Formulario de Faena
+          Ingresar Faena
         </Navbar.Link>
         <Navbar.Link
           onClick={() => {
             handleButtonForm("view");
           }}
         >
-          Visualizar Faenas
+          Listar Faenas
         </Navbar.Link>
 
         <Navbar.Link
@@ -66,9 +70,10 @@ export default function NavbarComponent({
             handleLogout();
           }}
         >
-          Logout
+          Salir
         </Navbar.Link>
       </Navbar.Collapse>
     </Navbar>
+    </div>
   );
 }

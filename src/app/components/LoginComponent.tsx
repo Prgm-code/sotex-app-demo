@@ -3,7 +3,6 @@
 import { Button, Card, Checkbox, Label, TextInput } from "flowbite-react";
 import Image from "next/image";
 import { useState } from "react";
-import { set } from "zod";
 
 export default function LoginComponent({ handleLogin }: { handleLogin: any }) {
   const [username, setUsername] = useState("");
@@ -15,61 +14,68 @@ export default function LoginComponent({ handleLogin }: { handleLogin: any }) {
   };
 
   return (
-    <main className="flex flex-col items-center justify-between p-10">
-      <h2 className="text-3xl font-bold text-center my-5">Acceso al Sistema</h2>
-      <Card className="max-w-sm">
-        <form
-          className="flex flex-col gap-4"
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleClick(username, password);
-          }}
-        >
-          <div className="mx-auto">
-            <Image
-              alt="MPQ Logo"
-              height="96"
-              src="/1669380754322.webp"
-              width="96"
-              className="mb-3 rounded-full shadow-lg"
-            />
-          </div>
-          <div>
-            <div className="mb-2 block">
+    <div
+      className="relative h-screen bg-no-repeat bg-cover bg-fixed bg-center"
+      style={{
+        backgroundImage: "url('/sotex/Hero-sotex.jpg')",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundAttachment: "fixed",
+      }}
+    >
+      <main className="flex flex-col items-center justify-center w-full min-h-screen p-4">
+        <h1 className="text-4xl font-bold text-center mb-5">
+          Acceso al Sistema
+        </h1>
+        <Card className="w-full max-w-md opacity-95 shadow-xl">
+          <form
+            className="flex flex-col gap-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleClick(username, password);
+            }}
+          >
+            <div className="mx-auto">
+              <Image
+                alt="MPQ Logo"
+                height="160"
+                src="/sotex/logo.png"
+                width="250"
+                className="mx-auto my-4"
+              />
+            </div>
+            <div>
               <Label htmlFor="email1" value="Ingrese Email" />
+              <TextInput
+                id="email1"
+                type="email"
+                placeholder="name@sotex.app"
+                required
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                }}
+              />
             </div>
-            <TextInput
-              id="email1"
-              type="email"
-              placeholder="name@mpq.com"
-              required
-              onChange={(e) => {
-                e.preventDefault();
-                setUsername(e.target.value);
-              }}
-            />
-          </div>
-          <div>
-            <div className="mb-2 block">
+            <div>
               <Label htmlFor="password1" value="Ingrese Password" />
+              <TextInput
+                placeholder="********"
+                id="password1"
+                type="password"
+                required
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+              />
             </div>
-            <TextInput
-              id="password1"
-              type="password"
-              required
-              onChange={(e) => {
-                e.preventDefault();
-                setPassword(e.target.value);
-              }}
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <Checkbox id="remember" />
-            <Label htmlFor="remember">Remember me</Label>
-          </div>
-          <Button type="submit">Submit</Button>
-        </form>
-      </Card>
-    </main>
+            <div className="flex items-center gap-2">
+              <Checkbox id="remember" />
+              <Label htmlFor="remember">Recuerdame</Label>
+            </div>
+            <Button type="submit">Enviar</Button>
+          </form>
+        </Card>
+      </main>
+    </div>
   );
 }

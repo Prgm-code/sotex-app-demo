@@ -41,11 +41,28 @@ function handleDelete(index: number) {
     }
 
   return (
+    <div className="relative min-h-screen bg-no-repeat bg-cover bg-fixed bg-center">
+    <div
+      className="absolute inset-0"
+      style={{
+        backgroundImage: "url('/sotex/5-1-Recovered2.jpg')",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundAttachment: "fixed",
+        zIndex: -1,
+      }}
+    ></div>
+    <div
+      className="absolute inset-0 bg-slate-300 bg-opacity-15  backdrop-blur-sm"
+      style={{ zIndex: -1 }}
+    ></div>
     <div className="overflow-x-auto">
-      <h2 className="text-3xl font-bold text-center p-10">
+    <h2 className="text-3xl font-bold text-center text-gray-900 sm:text-2xl lg:text-4xl xl:text-5xl pt-20 ">
         Listado de Faenas Realizadas{" "}
       </h2>
-      <Table>
+      <Table 
+        className="w-3/4 max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-2 mt-10">
+
         <Table.Head>
           <Table.HeadCell>Nº</Table.HeadCell>
           <Table.HeadCell>Fecha</Table.HeadCell>
@@ -88,6 +105,7 @@ function handleDelete(index: number) {
         </Table.Body>
       </Table>
     </div>
+  </div>
   );
 }
 

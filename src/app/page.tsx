@@ -75,7 +75,7 @@ export default function Home() {
 
   // Credenciales hardcoded
   const hardcodedCredentials = {
-    username: "user@mpq.com",
+    username: "user@sotex.app",
     password: "password123",
   };
 
@@ -106,6 +106,7 @@ export default function Home() {
           <NavbarComponent
             handleLogout={handleLogout}
             handleSetActiveView={handleSetActiveView}
+            
           />
 
           {activeView === "home" && (
