@@ -1,12 +1,12 @@
 {
-    "theme_color": "#047df9",
-    "background_color": "#047df9",
+    "theme_color": "#f69435",
+    "background_color": "#0000",
     "display": "standalone",
     "scope": "/",
     "start_url": "/",
-    "name": "Aplicaci\u00f3n Demo Sotex",
-    "short_name": "Sotex Demo App",
-    "description": "Aplicacion Dinamica de Gestion de Faenas ",
+    "name": "MPQ Demo App",
+    "short_name": "MPQ APP",
+    "description": "MPQ Aplicacion de Control de Faenas",
     "icons": [
         {
             "src": "/icon-192x192.png",
