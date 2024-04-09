@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "MPQ Demo App",
-  description: "MPQ Aplicacion de Control de Faenas",
+  title: "Sotex Demo App",
+  description: "Aplicación Dinamica de Gestion de Faenas",
   manifest: "/manifest.json",
   icons: {
     apple: "/icon-192x192.png",
