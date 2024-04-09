@@ -19,7 +19,6 @@ import {
   FieldErrors,
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { array } from "zod";
 
 type Inputs = {
   company: string;
@@ -88,7 +87,7 @@ const allOptions = Object.entries(mappedFormOptions).reduce<OptionElements>(
 
 console.log(allOptions);
 
-export default function Form({ agregarObjeto }: { agregarObjeto: any }) {
+export default function Form({ agregarObjeto, handleSetActiveView }: { agregarObjeto: any, handleSetActiveView: any}) {
   const {
     control,
     register,
@@ -120,7 +119,9 @@ export default function Form({ agregarObjeto }: { agregarObjeto: any }) {
     agregarObjeto(data);
     console.log(data);
     /* limpia el formulario  */
+    handleSetActiveView("view");
     reset();
+
   };
   console.log(errors);
   /* verificar que el error venga en un array si es ek caso de workingEMployees */

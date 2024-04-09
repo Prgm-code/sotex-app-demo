@@ -106,14 +106,16 @@ export default function Home() {
           <NavbarComponent
             handleLogout={handleLogout}
             handleSetActiveView={handleSetActiveView}
-            
           />
 
           {activeView === "home" && (
             <HomeComponent handleSetActiveView={handleSetActiveView} />
           )}
           {activeView === "form" && (
-            <FormComponent agregarObjeto={agregarObjeto} />
+            <FormComponent
+              agregarObjeto={agregarObjeto}
+              handleSetActiveView={handleSetActiveView}
+            />
           )}
           {activeView === "view" && (
             <ListReports objetos={objetos} eliminarObjeto={eliminarObjeto} />
