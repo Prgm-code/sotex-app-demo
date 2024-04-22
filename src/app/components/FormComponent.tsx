@@ -168,7 +168,7 @@ export default function Form({ agregarObjeto, handleSetActiveView }: { agregarOb
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage: "url('/sotex/5-1-Recovered2.jpg')",
+          backgroundImage: "url('/sotex/grafica-07.png')",
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           backgroundAttachment: "fixed",
